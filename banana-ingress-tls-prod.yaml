@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-banana-tls-prod
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/issuer: "letsencrypt-prod"
+    cert-manager.io/issue-temporary-certificate: "true"
+spec:
+  tls:
+  - hosts:
+    - k8s1.gs.nethserver.net
+    secretName: banana-tls-prod
+  rules:
+  - host: k8s1.gs.nethserver.net
+    http:
+      paths:
+      - path: /banana
+        pathType: Prefix
+        backend:
+          service:
+            name: banana-service
+            port:
+              number: 5678
